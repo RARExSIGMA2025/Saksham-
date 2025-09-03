@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>SakshamX - Social Links</title>
   <meta name="theme-color" content="#0b0f1a">
+  <link href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.css" rel="stylesheet">
   <style>
     :root {
       --bg: #0b0f1a;
@@ -80,6 +81,10 @@
       gap: 12px;
     }
     .link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       padding: 12px;
       background: rgba(255,255,255,.1);
       border-radius: 12px;
@@ -92,6 +97,10 @@
     .link:hover {
       transform: translateY(-2px);
       background: rgba(255,255,255,.2);
+    }
+    .icon {
+      width: 20px;
+      height: 20px;
     }
     .mute {
       position: fixed;
@@ -131,11 +140,17 @@
   <main class="center">
     <section class="card">
       <div class="name">SakshamX</div>
-      <div class="tag">Connect with me 🌐</div>
+      <div class="tag">Find me on 🌐</div>
       <div class="links">
-        <a class="link" href="https://t.me/Sakshamguptax" target="_blank">Telegram: @Sakshamguptax</a>
-        <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">Instagram: @Sakshamguptax</a>
-        <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">Snapchat: @Sakshamguptax</a>
+        <a class="link" href="https://t.me/Sakshamguptax" target="_blank">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/telegram.svg" alt="Telegram"> Telegram
+        </a>
+        <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram"> Instagram
+        </a>
+        <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/snapchat.svg" alt="Snapchat"> Snapchat
+        </a>
       </div>
       <div class="footer">© 2025 • Built with 💜 by Ayu</div>
     </section>
