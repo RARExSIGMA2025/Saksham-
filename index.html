@@ -133,8 +133,13 @@
     </video>
   </div>
 
+  <!-- Background Audio -->
+  <audio id="bgAudio" loop>
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mp3">
+  </audio>
+
   <!-- Sound toggle -->
-  <button id="muteBtn" class="mute">Loading...</button>
+  <button id="muteBtn" class="mute">Sound: OFF (click to UNMUTE)</button>
 
   <!-- Card -->
   <main class="center">
@@ -157,35 +162,40 @@
   </main>
 
   <script>
-    const vid = document.getElementById('bgvid');
-    const btn = document.getElementById('muteBtn');
+    const bgAudio = document.getElementById('bgAudio');
+    const muteBtn = document.getElementById('muteBtn');
     const localKey = 'soundPref';
-    let pref = localStorage.getItem(localKey) || 'on';
+    let pref = localStorage.getItem(localKey) || 'off';
 
     function updateBtn() {
-      btn.textContent = pref === 'on' ? 'Sound: ON (click to MUTE)' : 'Sound: OFF (click to UNMUTE)';
+      muteBtn.textContent = pref === 'on' ? 'Sound: ON (click to MUTE)' : 'Sound: OFF (click to UNMUTE)';
     }
 
-    // Initialize video and button state
-    vid.addEventListener('canplay', () => {
-      vid.muted = pref !== 'on'; // mute if pref is off
-      vid.play().catch(() => {});
-      updateBtn();
-    });
-
-    // Toggle sound
-    btn.addEventListener('click', () => {
+    // Toggle sound manually
+    muteBtn.addEventListener('click', () => {
       if (pref === 'on') {
         pref = 'off';
-        vid.muted = true;
+        bgAudio.pause();
       } else {
         pref = 'on';
-        vid.muted = false;
-        vid.play().catch(() => {});
+        bgAudio.play().catch(()=>{});
       }
       localStorage.setItem(localKey, pref);
       updateBtn();
     });
+
+    // Start sound on first click anywhere
+    document.body.addEventListener('click', () => {
+      if (pref === 'off') {
+        pref = 'on';
+        localStorage.setItem(localKey, pref);
+        bgAudio.play().catch(()=>{});
+        updateBtn();
+      }
+    }, { once: true });
+
+    // Initialize button state
+    updateBtn();
   </script>
 
 </body>
