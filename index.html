@@ -1,299 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SakshamX - Social Links</title>
-<meta name="theme-color" content="#0b0f1a">
-<style>
-  :root {
-    --bg:#0b0f1a; --text:#f5f7fb; --muted:#a9b2c7;
-    --stroke:rgba(255,255,255,.15); --glass:rgba(255,255,255,.08);
-    --blur:16px; --radius:20px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    overflow:hidden;
-  }
-
-  /* Background */
-  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
-  .bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.85) contrast(1.05)}
-  .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.7))}
-
-  /* Center card */
-  .center{position:fixed;inset:0;display:grid;place-items:center;padding:20px}
-  .card{
-    width:min(92vw,520px); padding:24px; border-radius:var(--radius);
-    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.06));
-    border:1px solid var(--stroke); backdrop-filter: blur(var(--blur));
-    box-shadow:0 20px 60px rgba(0,0,0,.6); text-align:center; position:relative; z-index:2;
-  }
-  h1{font-size:clamp(20px,3.6vw,30px); margin-bottom:6px}
-  .tag{color:var(--muted); margin-bottom:14px}
-
-  .links{display:flex;flex-direction:column;gap:10px}
-  .link{
-    display:flex;align-items:center;justify-content:center; gap:10px;
-    padding:12px;border-radius:12px;background:rgba(255,255,255,.08);
-    text-decoration:none;color:var(--text);font-weight:700;border:1px solid var(--stroke);
-    transition:transform .16s ease, background .16s ease;
-  }
-  .link:hover{transform:translateY(-3px); background:rgba(255,255,255,.14)}
-
-  /* toggle */
-  .mute{
-    position:fixed;right:14px;top:14px;z-index:20;
-    padding:8px 12px;border-radius:12px;background:rgba(0,0,0,.6);
-    border:1px solid rgba(255,255,255,.12); cursor:pointer;color:#fff;font-weight:700;
-    backdrop-filter: blur(6px);
-  }
-
-  /* overlay fallback if needed */
-  .overlay{
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)); z-index:30;
-  }
-  .overlay .box{
-    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-    border:1px solid rgba(255,255,255,.08); padding:20px; border-radius:12px; text-align:center;
-    width:min(90%,420px);
-  }
-  .overlay button{margin-top:12px;padding:10px 14px;border-radius:10px;border:none;background:#8b5cf6;color:#071124;font-weight:800;cursor:pointer}
-
-  .status{font-size:13px;color:var(--muted);margin-top:10px}
-  .footer{margin-top:16px;color:var(--muted);font-size:13px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RiyalX | Social Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    .toggle-btn {
+      background: rgba(0,0,0,0.5);
+      border: 2px solid white;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      color: white;
+      transition: background 0.3s;
+    }
+    .toggle-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+  </style>
 </head>
-<body>
+<body class="flex flex-col items-center justify-center h-screen text-white text-center">
 
-<!-- background video -->
-<div class="bg" aria-hidden="true">
-  <video id="bgvid" playsinline autoplay muted loop preload="auto">
-    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/videoone.mp4" type="video/mp4">
+  <!-- Background Video -->
+  <video autoplay muted loop id="bgVideo">
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/video1.mp4" type="video/mp4" />
   </video>
-</div>
 
-<!-- optional separate audio (if you have a music file). If not present, the script will unmute the video's audio. -->
-<audio id="bgAudio" preload="auto" playsinline crossorigin="anonymous">
-  <!-- Replace this with your raw github audio link, or remove the element to use video audio only -->
-  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
-</audio>
-
-<button id="muteBtn" class="mute" aria-pressed="false">Sound: OFF (Tap anywhere to enable)</button>
-
-<main class="center" id="pageRoot">
-  <section class="card" role="region" aria-label="Links">
-    <h1>SakshamX</h1>
-    <div class="tag">Find me on</div>
-
-    <div class="links">
-      <a class="link" href="https://t.me/Sakshamguptax" target="_blank" rel="noopener">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="tg" width="20" style="opacity:.95"> Telegram
-      </a>
-      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank" rel="noopener">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="ig" width="20" style="opacity:.95"> Instagram
-      </a>
-      <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank" rel="noopener">
-        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670133.png" alt="sc" width="20" style="opacity:.95"> Snapchat
-      </a>
+  <!-- Content -->
+  <div class="bg-black bg-opacity-40 rounded-xl p-6">
+    <h1 class="text-4xl font-bold mb-4">RiyalX</h1>
+    <div class="flex space-x-6 text-3xl">
+      <a href="https://instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="w-8 h-8" /></a>
+      <a href="https://t.me" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-8 h-8" /></a>
+      <a href="https://snapchat.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="w-8 h-8" /></a>
     </div>
-
-    <div class="status" id="statusText">Audio not enabled — tap anywhere to start sound.</div>
-    <div class="footer">© 2025 • Built with 💜 by Ayu</div>
-  </section>
-</main>
-
-<!-- overlay (hidden by default) appears only if autoplay blocked fully and fallback required) -->
-<div id="enableOverlay" class="overlay" style="display:none" aria-hidden="true">
-  <div class="box">
-    <div style="font-weight:800;font-size:18px">Tap to enable sound</div>
-    <div style="margin-top:8px;color:var(--muted)">Some browsers require an explicit tap. Tap the button to hear the audio.</div>
-    <button id="overlayEnable">Enable Sound</button>
+    <button id="soundToggle" class="toggle-btn mt-6">🔊 Sound ON</button>
   </div>
-</div>
 
-<script>
-(async function(){
-  const video = document.getElementById('bgvid');
-  const audio = document.getElementById('bgAudio'); // may have no src
-  const muteBtn = document.getElementById('muteBtn');
-  const statusText = document.getElementById('statusText');
-  const overlay = document.getElementById('enableOverlay');
-  const overlayEnable = document.getElementById('overlayEnable');
+  <!-- Audio -->
+  <audio id="bgAudio" loop>
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mp3" />
+  </audio>
 
-  const localKey = 'saksham_sound_pref_v2';
-  let pref = localStorage.getItem(localKey) || 'off'; // default off for safety
-  let started = false;
-  let audioContext = null;
+  <script>
+    const bgAudio = document.getElementById('bgAudio');
+    const toggleBtn = document.getElementById('soundToggle');
+    let soundEnabled = true;
 
-  function setUIOn() {
-    muteBtn.textContent = 'Sound: ON (click to MUTE)';
-    muteBtn.setAttribute('aria-pressed','true');
-    statusText.textContent = 'Sound is ON';
-  }
-  function setUIOff(){
-    muteBtn.textContent = 'Sound: OFF (click to UNMUTE)';
-    muteBtn.setAttribute('aria-pressed','false');
-    statusText.textContent = 'Audio not enabled — tap anywhere to start sound.';
-  }
-
-  // try to start using multiple strategies
-  async function attemptStart() {
-    if (started) return true;
-    // resume AudioContext if present
-    try {
-      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioContext.state === 'suspended') await audioContext.resume();
-    } catch(e){ console.warn('AudioContext resume failed', e); }
-
-    // helper to try playing audio element (if exists and has source)
-    async function tryAudioElement() {
-      if (!audio || !audio.querySelector('source') || !audio.querySelector('source').src) return false;
-      try {
-        audio.muted = false;
-        await audio.play();
-        // connect to audio context to unlock (optional)
-        try {
-          if(audioContext && typeof audioContext.createMediaElementSource === 'function'){
-            try { audioContext.createMediaElementSource(audio); } catch(e){ /* ignore cross-origin issues */ }
-          }
-        }catch(e){}
-        return true;
-      } catch(err) {
-        console.warn('audio element play failed:', err);
-        return false;
+    // First click anywhere starts audio
+    const enableAudio = () => {
+      if (soundEnabled) {
+        bgAudio.play().catch(() => {
+          alert("Tap 'Sound ON' to enable audio.");
+        });
       }
-    }
+      document.removeEventListener('click', enableAudio);
+    };
+    document.addEventListener('click', enableAudio);
 
-    // helper to try unmute & play video (if video contains audio track)
-    async function tryVideoUnmute() {
-      try {
-        video.muted = false;
-        await video.play();
-        return true;
-      } catch(err) {
-        console.warn('video unmute/play failed:', err);
-        return false;
+    // Toggle button
+    toggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      if (soundEnabled) {
+        toggleBtn.innerText = "🔊 Sound ON";
+        bgAudio.play();
+      } else {
+        toggleBtn.innerText = "🔇 Sound OFF";
+        bgAudio.pause();
       }
-    }
-
-    // 1) If audio element has source, try it first (multiple retries)
-    if (audio && audio.querySelector('source') && audio.querySelector('source').src) {
-      for (let i=0;i<3;i++){
-        if (await tryAudioElement()) { started = true; return true; }
-        await new Promise(r=>setTimeout(r, 220));
-      }
-    }
-
-    // 2) Fallback: unmute video (many times site uses audio inside video)
-    for (let i=0;i<3;i++){
-      if (await tryVideoUnmute()) { started = true; return true; }
-      await new Promise(r=>setTimeout(r, 220));
-    }
-
-    // 3) failed — show overlay asking user to explicitly enable
-    return false;
-  }
-
-  // Call this when user wants to enable sound
-  async function enableSoundFlow() {
-    const ok = await attemptStart();
-    if (ok) {
-      pref = 'on';
-      localStorage.setItem(localKey, pref);
-      setUIOn();
-      overlay.style.display = 'none';
-    } else {
-      // ask user explicitly with overlay button
-      overlay.style.display = 'flex';
-      statusText.textContent = 'Tap the button to enable sound';
-    }
-  }
-
-  // Initialize UI based on saved pref
-  if (pref === 'on') {
-    // try to auto-enable because user previously allowed
-    enableSoundFlow().then(r => {
-      if (!r) setUIOff();
     });
-  } else {
-    setUIOff();
-  }
-
-  // Global first-interaction handler: user taps/clicks anywhere -> try to start audio
-  const firstGesture = async (e) => {
-    // only run once
-    document.removeEventListener('pointerdown', firstGesture);
-    document.removeEventListener('touchstart', firstGesture);
-    document.removeEventListener('keydown', firstGesture);
-    // Attempt to enable audio
-    const ok = await attemptStart();
-    if (ok) {
-      pref = 'on';
-      localStorage.setItem(localKey, pref);
-      setUIOn();
-    } else {
-      setUIOff(); // leave off and show overlay next
-    }
-  };
-  document.addEventListener('pointerdown', firstGesture, { once:true, passive:true });
-  document.addEventListener('touchstart', firstGesture, { once:true, passive:true });
-  document.addEventListener('keydown', firstGesture, { once:true, passive:true });
-
-  // Mute button toggles on/off
-  muteBtn.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    if (pref === 'on') {
-      // turn off
-      pref = 'off';
-      localStorage.setItem(localKey, pref);
-      // pause audio if exists
-      try { if (audio && !audio.paused) audio.pause(); } catch(e){}
-      // mute video
-      try { video.muted = true; } catch(e){}
-      setUIOff();
-    } else {
-      // try enabling
-      await enableSoundFlow();
-    }
-  });
-
-  // overlay enable button
-  overlayEnable.addEventListener('click', async () => {
-    await enableSoundFlow();
-  });
-
-  // If audio starts later, reflect UI changes: listen to play event on audio/video
-  function markStarted() {
-    started = true;
-    pref = 'on';
-    localStorage.setItem(localKey, pref);
-    setUIOn();
-    try{ overlay.style.display = 'none'; }catch(e){}
-  }
-  if (audio) {
-    audio.addEventListener('play', markStarted);
-    audio.addEventListener('playing', markStarted);
-  }
-  video.addEventListener('play', () => {
-    // if video has sound track and is unmuted then treat as started
-    if (!video.muted) markStarted();
-  });
-
-  // safety timeout: if nothing happened after 3s and pref==on we try again (handles delayed canplay)
-  setTimeout(() => {
-    if (pref === 'on' && !started) {
-      attemptStart();
-    }
-  }, 3000);
-
-})();
-</script>
-
+  </script>
 </body>
 </html>
