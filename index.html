@@ -1,186 +1,73 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SakshamX - Social Links</title>
-<meta name="theme-color" content="#0b0f1a">
-
-<style>
-  :root {
-    --bg:#0b0f1a;
-    --text:#f5f7fb;
-    --muted:#a9b2c7;
-    --stroke:rgba(255,255,255,.15);
-    --glass:rgba(255,255,255,.08);
-    --blur:16px;
-    --radius:20px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;}
-  body{
-    background:var(--bg);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    color:var(--text);
-    overflow:hidden;
-  }
-
-  /* Background video */
-  .bg{
-    position:fixed;
-    inset:0;
-    z-index:-1;
-    overflow:hidden;
-  }
-  .bg video{
-    position:absolute;
-    top:50%;left:50%;
-    min-width:100%;
-    min-height:100%;
-    transform:translate(-50%,-50%);
-    object-fit:cover;
-    filter:brightness(.85) contrast(1.05);
-  }
-  .bg::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.7));
-  }
-
-  /* Card Center */
-  .center{
-    position:fixed;
-    inset:0;
-    display:grid;
-    place-items:center;
-    padding:20px;
-  }
-  .card{
-    width:min(90vw,500px);
-    padding:24px;
-    background:var(--glass);
-    backdrop-filter:blur(var(--blur));
-    -webkit-backdrop-filter:blur(var(--blur));
-    border:1px solid var(--stroke);
-    border-radius:var(--radius);
-    box-shadow:0 20px 60px rgba(0,0,0,.6);
-    text-align:center;
-  }
-
-  .name{
-    font-size:clamp(22px,3.5vw,30px);
-    font-weight:800;
-    margin-bottom:8px;
-  }
-  .tag{
-    font-size:14px;
-    color:var(--muted);
-    margin-bottom:18px;
-  }
-
-  /* Links */
-  .links{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .link{
-    text-decoration:none;
-    padding:12px;
-    background:rgba(255,255,255,.1);
-    border-radius:12px;
-    color:var(--text);
-    font-weight:600;
-    border:1px solid var(--stroke);
-    transition:transform .2s ease, background .2s ease;
-  }
-  .link:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,.2);
-  }
-
-  /* Toggle Button */
-  .mute{
-    position:fixed;
-    top:14px;
-    right:14px;
-    background:rgba(0,0,0,.6);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.2);
-    border-radius:12px;
-    padding:8px 12px;
-    cursor:pointer;
-    backdrop-filter:blur(10px);
-    font-size:14px;
-    font-weight:600;
-  }
-
-  .footer{
-    margin-top:16px;
-    font-size:12px;
-    color:var(--muted);
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SakshamX - Social Links</title>
+  <meta name="theme-color" content="#0b0f1a">
+  <style>
+    :root { --bg:#0b0f1a; --text:#f5f7fb; --muted:#a9b2c7; --stroke:rgba(255,255,255,.15); --glass:rgba(255,255,255,.08); --blur:16px; --radius:20px; --accent:#8b5cf6; }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{background:var(--bg);font-family:system-ui,Segoe UI,Roboto,Arial;color:var(--text);overflow:hidden;}
+    .bg{position:fixed;inset:0;z-index:-1;overflow:hidden;}
+    .bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.85) contrast(1.05);}
+    .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.7));}
+    .center{position:fixed;inset:0;display:grid;place-items:center;padding:20px;}
+    .card{width:min(90vw,500px);padding:24px;backdrop-filter:blur(var(--blur));background:var(--glass);border:1px solid var(--stroke);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.6);text-align:center;}
+    .name{font-size:clamp(22px,3.5vw,30px);font-weight:800;margin-bottom:8px;}
+    .tag{font-size:14px;color:var(--muted);margin-bottom:18px;}
+    .links{display:flex;flex-direction:column;gap:12px;}
+    .link{padding:12px;background:rgba(255,255,255,.1);border-radius:12px;color:var(--text);font-weight:600;border:1px solid var(--stroke);text-decoration:none;transition:transform .2s,background .2s;}
+    .link:hover{transform:translateY(-2px);background:rgba(255,255,255,.2);}
+    .mute{position:fixed;top:14px;right:14px;background:rgba(0,0,0,.6);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:8px 12px;cursor:pointer;backdrop-filter:blur(10px);font-size:14px;font-weight:600;}
+    .footer{margin-top:16px;font-size:12px;color:var(--muted);}
+  </style>
 </head>
 <body>
 
-<!-- Background video -->
-<div class="bg">
-  <video id="bgvid" playsinline autoplay loop>
-    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/video1.mp4" type="video/mp4">
-  </video>
-</div>
+  <div class="bg">
+    <video id="bgvid" playsinline autoplay loop>
+      <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/videoone.mp4" type="video/mp4">
+    </video>
+  </div>
 
-<!-- Toggle Button -->
-<button id="muteBtn" class="mute">Sound Loading...</button>
+  <button id="muteBtn" class="mute">Sound Loading...</button>
 
-<!-- Center Card -->
-<main class="center">
-  <section class="card">
-    <div class="name">SakshamX</div>
-    <div class="tag">Connect with me on socials 🌐</div>
+  <main class="center">
+    <section class="card">
+      <div class="name">SakshamX</div>
+      <div class="tag">Connect with me on socials 🌐</div>
+      <div class="links">
+        <a class="link" href="https://t.me/Sakshamguptax" target="_blank">Telegram: @Sakshamguptax</a>
+        <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">Instagram: @Sakshamguptax</a>
+        <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">Snapchat: @Sakshamguptax</a>
+      </div>
+      <div class="footer">© 2025 • Built with 💜 by Ayu</div>
+    </section>
+  </main>
 
-    <div class="links">
-      <a class="link" href="https://t.me/Sakshamguptax" target="_blank">Telegram: @Sakshamguptax</a>
-      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">Instagram: @Sakshamguptax</a>
-      <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">Snapchat: @Sakshamguptax</a>
-    </div>
+  <script>
+    const vid = document.getElementById('bgvid');
+    const btn = document.getElementById('muteBtn');
+    const localKey = 'soundPref';
+    let pref = localStorage.getItem(localKey) || 'on';
 
-    <div class="footer">© 2025 • Built with 💜 by Ayu</div>
-  </section>
-</main>
+    const updateBtn = () => btn.textContent = pref === 'on' ? 'Sound: ON (click to MUTE)' : 'Sound: OFF (click to UNMUTE)';
 
-<script>
-  const video = document.getElementById('bgvid');
-  const muteBtn = document.getElementById('muteBtn');
+    btn.addEventListener('click', async ()=>{
+      pref = pref === 'on' ? 'off' : 'on';
+      localStorage.setItem(localKey, pref);
+      vid.muted = pref === 'off';
+      updateBtn();
+    });
 
-  // Load saved state from localStorage
-  let soundState = localStorage.getItem('soundState') || 'on';
-
-  function updateSound() {
-    if (soundState === 'on') {
-      video.muted = false;
-      muteBtn.textContent = 'Sound: ON (Click to Mute)';
-    } else {
-      video.muted = true;
-      muteBtn.textContent = 'Sound: OFF (Click to Unmute)';
-    }
-  }
-
-  // Toggle sound on button click
-  muteBtn.addEventListener('click', () => {
-    soundState = soundState === 'on' ? 'off' : 'on';
-    localStorage.setItem('soundState', soundState);
-    updateSound();
-  });
-
-  // Initialize
-  video.addEventListener('canplay', () => {
-    updateSound();
-    video.play().catch(err => console.error('Autoplay error:', err));
-  });
-</script>
+    vid.addEventListener('canplay', () => {
+      vid.muted = pref === 'off';
+      updateBtn();
+      vid.play().catch(()=>{/* autoplay blocked */});
+    });
+  </script>
 
 </body>
 </html>
