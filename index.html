@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SakshamX • Official Links</title>
+<meta name="theme-color" content="#0b0f1a">
+
+<style>
+  :root{
+    --bg:#0b0f1a;
+    --text:#f5f7fb;
+    --muted:#a9b2c7;
+    --stroke:rgba(255,255,255,.15);
+    --glassA:rgba(255,255,255,.10);
+    --glassB:rgba(255,255,255,.06);
+    --accent:#8b5cf6;
+    --accentB:#06b6d4;
+    --radius:22px;
+    --blur:18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans";
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;
+    overflow:hidden;
+  }
+  .card{
+    width:min(92vw, 480px);
+    border-radius:var(--radius);
+    background:linear-gradient(180deg,var(--glassA),var(--glassB));
+    border:1px solid var(--stroke);
+    backdrop-filter:blur(var(--blur));
+    padding:26px;
+    box-shadow:0 24px 80px rgba(0,0,0,.55);
+  }
+  .pfp{
+    width:120px;height:120px;border-radius:50%;
+    overflow:hidden;margin:0 auto 12px;
+    border:2px solid #ffffff66; box-shadow:0 10px 32px rgba(0,0,0,.45);
+  }
+  .pfp img{width:100%;height:100%;object-fit:cover}
+  h1{font-size:28px;margin:10px 0}
+  p{color:var(--muted);margin:0 0 18px;font-size:14px}
+  .links{
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .btn{
+    display:flex;align-items:center;justify-content:center;
+    gap:10px;
+    text-decoration:none;
+    color:#fff;
+    background:linear-gradient(90deg,var(--accent),var(--accentB));
+    padding:12px;
+    border-radius:14px;
+    font-weight:700;
+    transition:transform .2s ease;
+  }
+  .btn:hover{transform:scale(1.05)}
+  .btn img{width:20px;height:20px}
+  footer{
+    margin-top:20px;
+    font-size:12px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="pfp">
+    <img src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/IMG_20250903_192843.jpg" alt="Profile">
+  </div>
+  <h1>@Sakshamguptax</h1>
+  <p>Follow me everywhere — click below 🔗</p>
+
+  <div class="links">
+    <a class="btn" href="https://t.me/Sakshamguptax" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram"> Telegram
+    </a>
+    <a class="btn" href="https://instagram.com/Sakshamguptax" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"> Instagram
+    </a>
+    <a class="btn" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">
+      <img src="https://cdn-icons-png.flaticon.com/512/3670/3670133.png" alt="Snapchat"> Snapchat
+    </a>
+  </div>
+
+  <footer>© 2025 SakshamX • Powered by Ayu 🤍</footer>
+</div>
+
+</body>
+</html>
