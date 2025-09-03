@@ -15,50 +15,48 @@
     --glass:rgba(255,255,255,.08);
     --blur:16px;
     --radius:20px;
-    --accent:#8b5cf6;
   }
-  * { box-sizing: border-box; margin:0; padding:0; }
-  html,body { height:100%; }
-  body {
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
     background:var(--bg);
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
     color:var(--text);
     overflow:hidden;
   }
 
   /* Background video */
-  .bg {
+  .bg{
     position:fixed;
     inset:0;
     z-index:-1;
     overflow:hidden;
   }
-  .bg video {
+  .bg video{
     position:absolute;
-    top:50%;
-    left:50%;
+    top:50%;left:50%;
     min-width:100%;
     min-height:100%;
     transform:translate(-50%,-50%);
     object-fit:cover;
     filter:brightness(.85) contrast(1.05);
   }
-  .bg::after {
+  .bg::after{
     content:"";
     position:absolute;
     inset:0;
     background:linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.7));
   }
 
-  /* Center card */
-  .center {
+  /* Card Center */
+  .center{
     position:fixed;
     inset:0;
     display:grid;
     place-items:center;
     padding:20px;
   }
-  .card {
+  .card{
     width:min(90vw,500px);
     padding:24px;
     background:var(--glass);
@@ -70,24 +68,24 @@
     text-align:center;
   }
 
-  .name {
+  .name{
     font-size:clamp(22px,3.5vw,30px);
     font-weight:800;
     margin-bottom:8px;
   }
-  .tag {
+  .tag{
     font-size:14px;
     color:var(--muted);
     margin-bottom:18px;
   }
 
   /* Links */
-  .links {
+  .links{
     display:flex;
     flex-direction:column;
     gap:12px;
   }
-  .link {
+  .link{
     text-decoration:none;
     padding:12px;
     background:rgba(255,255,255,.1);
@@ -97,13 +95,13 @@
     border:1px solid var(--stroke);
     transition:transform .2s ease, background .2s ease;
   }
-  .link:hover {
+  .link:hover{
     transform:translateY(-2px);
     background:rgba(255,255,255,.2);
   }
 
-  /* Mute Button */
-  .mute {
+  /* Toggle Button */
+  .mute{
     position:fixed;
     top:14px;
     right:14px;
@@ -118,7 +116,7 @@
     font-weight:600;
   }
 
-  .footer {
+  .footer{
     margin-top:16px;
     font-size:12px;
     color:var(--muted);
@@ -129,13 +127,13 @@
 
 <!-- Background video -->
 <div class="bg">
-  <video id="bgvid" playsinline autoplay muted loop>
+  <video id="bgvid" playsinline autoplay loop>
     <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/video1.mp4" type="video/mp4">
   </video>
 </div>
 
-<!-- Mute/Unmute Button -->
-<button id="muteBtn" class="mute">Sound Off</button>
+<!-- Toggle Button -->
+<button id="muteBtn" class="mute">Sound Loading...</button>
 
 <!-- Center Card -->
 <main class="center">
@@ -157,19 +155,30 @@
   const video = document.getElementById('bgvid');
   const muteBtn = document.getElementById('muteBtn');
 
-  muteBtn.addEventListener('click', async () => {
-    try {
-      if (video.muted) {
-        video.muted = false;
-        await video.play();
-        muteBtn.textContent = 'Sound On';
-      } else {
-        video.muted = true;
-        muteBtn.textContent = 'Sound Off';
-      }
-    } catch (err) {
-      console.error('Playback error:', err);
+  // Load saved state from localStorage
+  let soundState = localStorage.getItem('soundState') || 'on';
+
+  function updateSound() {
+    if (soundState === 'on') {
+      video.muted = false;
+      muteBtn.textContent = 'Sound: ON (Click to Mute)';
+    } else {
+      video.muted = true;
+      muteBtn.textContent = 'Sound: OFF (Click to Unmute)';
     }
+  }
+
+  // Toggle sound on button click
+  muteBtn.addEventListener('click', () => {
+    soundState = soundState === 'on' ? 'off' : 'on';
+    localStorage.setItem('soundState', soundState);
+    updateSound();
+  });
+
+  // Initialize
+  video.addEventListener('canplay', () => {
+    updateSound();
+    video.play().catch(err => console.error('Autoplay error:', err));
   });
 </script>
 
