@@ -1,89 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RiyalX | Social Hub</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-    }
-    video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-    .toggle-btn {
-      background: rgba(0,0,0,0.5);
-      border: 2px solid white;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      cursor: pointer;
-      color: white;
-      transition: background 0.3s;
-    }
-    .toggle-btn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SakshamX - Social Links</title>
+<meta name="theme-color" content="#0b0f1a">
+<style>
+  :root {
+    --bg:#0b0f1a; --text:#f5f7fb; --muted:#a9b2c7;
+    --stroke:rgba(255,255,255,.15); --glass:rgba(255,255,255,.08);
+    --blur:16px; --radius:20px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    overflow:hidden;
+  }
+
+  /* Background */
+  .bg{position:fixed;inset:0;z-index:-1;overflow:hidden}
+  .bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.85) contrast(1.05)}
+  .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.2),rgba(0,0,0,.7))}
+
+  /* Center card */
+  .center{position:fixed;inset:0;display:grid;place-items:center;padding:20px}
+  .card{
+    width:min(92vw,520px); padding:24px; border-radius:var(--radius);
+    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.06));
+    border:1px solid var(--stroke); backdrop-filter: blur(var(--blur));
+    box-shadow:0 20px 60px rgba(0,0,0,.6); text-align:center; position:relative; z-index:2;
+  }
+  h1{font-size:clamp(20px,3.6vw,30px); margin-bottom:6px}
+  .tag{color:var(--muted); margin-bottom:14px}
+
+  .links{display:flex;flex-direction:column;gap:10px}
+  .link{
+    display:flex;align-items:center;justify-content:center; gap:10px;
+    padding:12px;border-radius:12px;background:rgba(255,255,255,.08);
+    text-decoration:none;color:var(--text);font-weight:700;border:1px solid var(--stroke);
+    transition:transform .16s ease, background .16s ease;
+  }
+  .link:hover{transform:translateY(-3px); background:rgba(255,255,255,.14)}
+
+  /* toggle */
+  .mute{
+    position:fixed;right:14px;top:14px;z-index:20;
+    padding:8px 12px;border-radius:12px;background:rgba(0,0,0,.6);
+    border:1px solid rgba(255,255,255,.12); cursor:pointer;color:#fff;font-weight:700;
+    backdrop-filter: blur(6px);
+  }
+
+  .status{font-size:13px;color:var(--muted);margin-top:10px}
+  .footer{margin-top:16px;color:var(--muted);font-size:13px}
+</style>
 </head>
-<body class="flex flex-col items-center justify-center h-screen text-white text-center">
+<body>
 
-  <!-- Background Video -->
-  <video autoplay muted loop id="bgVideo">
-    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/video1.mp4" type="video/mp4" />
+<!-- background video -->
+<div class="bg" aria-hidden="true">
+  <video id="bgvid" playsinline autoplay muted loop preload="auto">
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/videoone.mp4" type="video/mp4">
   </video>
+</div>
 
-  <!-- Content -->
-  <div class="bg-black bg-opacity-40 rounded-xl p-6">
-    <h1 class="text-4xl font-bold mb-4">RiyalX</h1>
-    <div class="flex space-x-6 text-3xl">
-      <a href="https://instagram.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" class="w-8 h-8" /></a>
-      <a href="https://t.me" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" class="w-8 h-8" /></a>
-      <a href="https://snapchat.com" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3670/3670157.png" class="w-8 h-8" /></a>
+<!-- audio -->
+<audio id="bgAudio" preload="auto" loop>
+  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- toggle button -->
+<button id="muteBtn" class="mute">Sound: OFF (Tap anywhere)</button>
+
+<!-- center card -->
+<main class="center">
+  <section class="card">
+    <h1>SakshamX</h1>
+    <div class="tag">Find me on</div>
+
+    <div class="links">
+      <a class="link" href="https://t.me/Sakshamguptax" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" width="20" alt="Telegram"> Telegram
+      </a>
+      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="20" alt="Instagram"> Instagram
+      </a>
+      <a class="link" href="https://www.snapchat.com/add/Sakshamguptax" target="_blank">
+        <img src="https://cdn-icons-png.flaticon.com/512/3670/3670133.png" width="20" alt="Snapchat"> Snapchat
+      </a>
     </div>
-    <button id="soundToggle" class="toggle-btn mt-6">🔊 Sound ON</button>
-  </div>
 
-  <!-- Audio -->
-  <audio id="bgAudio" loop>
-    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mp3" />
-  </audio>
+    <div class="status" id="statusText">Audio not enabled — tap anywhere.</div>
+    <div class="footer">© 2025 • Built with 💜 by Ayu</div>
+  </section>
+</main>
 
-  <script>
-    const bgAudio = document.getElementById('bgAudio');
-    const toggleBtn = document.getElementById('soundToggle');
-    let soundEnabled = true;
+<script>
+const video = document.getElementById('bgvid');
+const audio = document.getElementById('bgAudio');
+const muteBtn = document.getElementById('muteBtn');
+const statusText = document.getElementById('statusText');
 
-    // First click anywhere starts audio
-    const enableAudio = () => {
-      if (soundEnabled) {
-        bgAudio.play().catch(() => {
-          alert("Tap 'Sound ON' to enable audio.");
-        });
-      }
-      document.removeEventListener('click', enableAudio);
-    };
-    document.addEventListener('click', enableAudio);
+let soundEnabled = false;
 
-    // Toggle button
-    toggleBtn.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      if (soundEnabled) {
-        toggleBtn.innerText = "🔊 Sound ON";
-        bgAudio.play();
-      } else {
-        toggleBtn.innerText = "🔇 Sound OFF";
-        bgAudio.pause();
-      }
-    });
-  </script>
+// try enabling sound
+async function enableSound() {
+  try {
+    await audio.play();
+    audio.muted = false;
+    video.muted = false;
+    soundEnabled = true;
+    muteBtn.textContent = 'Sound: ON (Click to MUTE)';
+    statusText.textContent = 'Sound is ON';
+  } catch {
+    statusText.textContent = 'Tap again to enable sound (browser blocked autoplay)';
+  }
+}
+
+// toggle mute/unmute
+muteBtn.addEventListener('click', () => {
+  if (soundEnabled) {
+    audio.pause();
+    video.muted = true;
+    soundEnabled = false;
+    muteBtn.textContent = 'Sound: OFF (Click to UNMUTE)';
+    statusText.textContent = 'Audio muted';
+  } else {
+    enableSound();
+  }
+});
+
+// start sound on first click anywhere
+document.addEventListener('click', enableSound, { once: true });
+</script>
+
 </body>
 </html>
