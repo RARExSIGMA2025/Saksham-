@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SakshamX — Links</title>
+<meta name="theme-color" content="#0b0f1a" />
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+  :root{
+    --bg:#0b0f1a; --text:#f5f7fb; --muted:#a9b2c7;
+    --cardA:rgba(255,255,255,.10); --cardB:rgba(255,255,255,.06);
+    --stroke:rgba(255,255,255,.16); --radius:22px; --blur:18px;
+    --accent:#8b5cf6; --accent2:#06b6d4; --shadow:0 28px 90px rgba(0,0,0,.55);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0}
+  body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    background:var(--bg); color:var(--text); overflow:hidden;
+  }
+
+  /* BG video */
+  .bg{position:fixed; inset:0; z-index:-2; overflow:hidden}
+  .bg video{
+    position:absolute; top:50%; left:50%;
+    min-width:100%; min-height:100%;
+    transform:translate(-50%,-50%); object-fit:cover;
+    filter:saturate(1.05) brightness(.90) contrast(1.05);
+  }
+  .bg::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(80% 60% at 50% 40%, rgba(0,0,0,0), rgba(0,0,0,.45)),
+      linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6));
+  }
+
+  /* subtle animated colorful blobs */
+  .blob{position:absolute; width:46vmax; height:46vmax; border-radius:50%;
+    filter:blur(60px); opacity:.20; pointer-events:none; z-index:-1;
+    background:conic-gradient(from 0deg, #8b5cf6 0%, #06b6d4 40%, #22d3ee 70%, #8b5cf6 100%);
+    animation: blobMove 26s ease-in-out infinite alternate; mix-blend-mode:screen;}
+  .blob.b2{animation-duration:30s; transform:translateX(40vw) translateY(10vh) scale(.8)}
+  @keyframes blobMove{
+    0%{transform:translate(-20vw,-10vh) scale(.9) rotate(0deg)}
+    50%{transform:translate(10vw,10vh) scale(1.05) rotate(120deg)}
+    100%{transform:translate(-5vw,25vh) scale(.95) rotate(260deg)}
+  }
+
+  /* Center card (glass) */
+  .center{position:fixed; inset:0; display:grid; place-items:center; padding:22px}
+  .card{
+    width:min(92vw,560px); border-radius:var(--radius);
+    background:linear-gradient(180deg,var(--cardA),var(--cardB));
+    border:1px solid var(--stroke); backdrop-filter:blur(var(--blur));
+    -webkit-backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+    padding:26px 22px; position:relative; text-align:center;
+    animation: fadeUp .5s ease both;
+  }
+  @keyframes fadeUp{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
+
+  .pfp{
+    width:96px;height:96px;border-radius:50%; object-fit:cover; display:inline-block;
+    border:3px solid rgba(255,255,255,.6); box-shadow:0 10px 32px rgba(0,0,0,.45);
+  }
+  .title{font-weight:900; font-size:clamp(20px,3.6vw,30px); margin-top:8px}
+  .tag{color:var(--muted); margin-top:6px}
+
+  .links{display:flex; flex-direction:column; gap:12px; margin-top:18px}
+  .link{
+    display:flex; align-items:center; gap:12px; justify-content:center;
+    padding:14px 16px; border-radius:14px; background:rgba(255,255,255,.06);
+    border:1px solid var(--stroke); color:var(--text); text-decoration:none; font-weight:800;
+    transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+  }
+  .link:hover{ transform:translateY(-4px); background:rgba(255,255,255,.12); box-shadow:0 10px 30px rgba(0,0,0,.32) }
+  .ico{width:22px;height:22px; display:inline-grid; place-items:center}
+
+  /* simple sound control */
+  .soundBar{
+    display:flex; gap:12px; align-items:center; justify-content:center; margin-top:14px;
+  }
+  .muteBtn{
+    padding:10px 14px; border-radius:12px; background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#071124; font-weight:800; border:none; cursor:pointer; box-shadow:0 12px 36px rgba(6,182,212,.14);
+  }
+  .muteBtn.off{
+    background:rgba(255,255,255,.06); color:var(--text); border:1px solid rgba(255,255,255,.06);
+  }
+
+  .status{color:var(--muted); margin-top:10px; font-size:13px}
+  .foot{color:var(--muted); margin-top:14px; font-size:13px}
+
+  @media (max-width:420px){
+    .pfp{width:84px;height:84px}
+    .card{padding:18px}
+  }
+</style>
+</head>
+<body>
+
+<!-- Background + blobs -->
+<div class="bg" aria-hidden="true">
+  <video id="bgvid" playsinline autoplay muted loop preload="auto" poster="">
+    <!-- background video (replace as needed) -->
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Capcut/main/SNUFF%206.mp4" type="video/mp4">
+  </video>
+  <div class="blob"></div>
+  <div class="blob b2"></div>
+  <div class="bg-fade" style="position:absolute;inset:0;z-index:0"></div>
+</div>
+
+<!-- Optional separate audio track -->
+<audio id="bgAudio" preload="auto" loop>
+  <!-- audio (replace as needed) -->
+  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Center card -->
+<main class="center" id="tapRoot">
+  <section class="card" role="region" aria-label="links">
+    <img class="pfp" alt="SakshamX" src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/IMG_20250903_192843.jpg">
+    <div class="title">SakshamX</div>
+    <div class="tag">Find me on</div>
+
+    <nav class="links" aria-label="Social links">
+      <a class="link" href="https://t.me/Sakshamguptax" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">📨</span> Telegram
+      </a>
+
+      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">📸</span> Instagram
+      </a>
+
+      <a class="link" href="https://www.snapchat.com/add/sakshamguptax" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">👻</span> Snapchat
+      </a>
+    </nav>
+
+    <div class="soundBar" aria-hidden="false">
+      <button id="soundBtn" class="muteBtn off" aria-pressed="false" aria-label="Play background sound">Play Sound</button>
+    </div>
+
+    <div class="status" id="soundStatus">Audio is OFF — click Play Sound to enable.</div>
+    <div class="foot">© 2025 • Built with 💜 by Ayu</div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const audio = document.getElementById('bgAudio');
+  const soundBtn = document.getElementById('soundBtn');
+  const soundStatus = document.getElementById('soundStatus');
+  const STORAGE_KEY = 'saksham_sound_pref_v3';
+
+  // Ensure video remains muted (background video used for visuals only)
+  try { document.getElementById('bgvid').muted = true; } catch(e){}
+
+  // state
+  let isPlaying = false;
+
+  // helper UI update
+  function updateUI() {
+    if (isPlaying) {
+      soundBtn.classList.remove('off');
+      soundBtn.textContent = 'Pause Sound';
+      soundBtn.setAttribute('aria-pressed', 'true');
+      soundStatus.textContent = 'Audio is ON — playing in background';
+    } else {
+      soundBtn.classList.add('off');
+      soundBtn.textContent = 'Play Sound';
+      soundBtn.setAttribute('aria-pressed', 'false');
+      soundStatus.textContent = 'Audio is OFF — click Play Sound to enable.';
+    }
+  }
+
+  // try resume if user previously enabled
+  async function tryAutoResume() {
+    const pref = localStorage.getItem(STORAGE_KEY);
+    if (pref === 'on') {
+      try {
+        await audio.play();
+        isPlaying = true;
+        updateUI();
+      } catch (err) {
+        // Can't auto-play without gesture — leave OFF until user clicks
+        console.log('Auto resume blocked by browser:', err);
+        isPlaying = false;
+        updateUI();
+      }
+    } else {
+      updateUI();
+    }
+  }
+
+  // Play audio (user gesture required)
+  async function playAudio() {
+    try {
+      await audio.play();
+      isPlaying = true;
+      localStorage.setItem(STORAGE_KEY, 'on');
+      updateUI();
+      // small celebratory feedback
+      try { confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } }); } catch(e){}
+    } catch (err) {
+      console.warn('Play blocked:', err);
+      // keep it off, and show text to user
+      isPlaying = false;
+      updateUI();
+      alert('Playback blocked by browser. Please tap Play Sound again to allow audio.');
+    }
+  }
+
+  // Pause audio
+  function pauseAudio() {
+    try { audio.pause(); } catch(e){}
+    isPlaying = false;
+    localStorage.setItem(STORAGE_KEY, 'off');
+    updateUI();
+  }
+
+  // Toggle on button click
+  soundBtn.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    if (!isPlaying) {
+      await playAudio();
+    } else {
+      pauseAudio();
+    }
+  });
+
+  // If audio element emits ended/abort/error, reflect UI
+  audio.addEventListener('pause', () => { if (!audio.paused) return; /* event may not be reliable */ });
+  audio.addEventListener('play', () => { isPlaying = true; updateUI(); });
+  audio.addEventListener('error', (e) => { console.error('Audio error', e); isPlaying = false; updateUI(); });
+
+  // initial attempt to resume if previously ON
+  tryAutoResume();
+
+  // Clean: no "tap anywhere" auto-enable handlers — user must click the play button
+})();
+</script>
+</body>
+</html>
