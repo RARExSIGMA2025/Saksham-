@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SakshamX — Social Hub</title>
+<style>
+:root {
+  --bg: #0b0f1a; --text: #f5f7fb; --muted: #a9b2c7;
+  --cardA: rgba(255,255,255,.10); --cardB: rgba(255,255,255,.06);
+  --stroke: rgba(255,255,255,.16); --radius: 22px; --blur: 18px;
+  --shadow: 0 28px 90px rgba(0,0,0,.55);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body,html{height:100%;font-family:system-ui,Segoe UI,Roboto;background:var(--bg);color:var(--text);}
+
+/* background video */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;
+  transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.85)}
+
+/* overlay popup */
+.overlay {
+  position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:50;
+  backdrop-filter:blur(6px);animation:fadeIn .5s ease both;
+}
+.overlay h2 {font-size:22px;margin-bottom:20px;text-align:center}
+.btns {display:flex;gap:20px}
+.btn {
+  padding:14px 28px;font-size:16px;font-weight:700;border:none;border-radius:12px;
+  cursor:pointer;transition:all .2s
+}
+.allow {background:#06b6d4;color:#fff}
+.allow:hover {background:#0891b2}
+.skip {background:#444;color:#eee}
+.skip:hover {background:#666}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* card content */
+.center{position:fixed;inset:0;display:grid;place-items:center;padding:20px}
+.card{width:min(92vw,520px);padding:26px 22px;background:linear-gradient(180deg,var(--cardA),var(--cardB));
+  border:1px solid var(--stroke);border-radius:var(--radius);backdrop-filter:blur(var(--blur));
+  box-shadow:var(--shadow);text-align:center}
+.pfp{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.5)}
+.title{font-weight:900;font-size:clamp(20px,3.6vw,30px);margin-top:10px}
+.tag{color:var(--muted);margin-top:6px}
+.links{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.link{display:flex;align-items:center;gap:12px;justify-content:center;
+  padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.07);
+  border:1px solid var(--stroke);color:var(--text);text-decoration:none;font-weight:700;
+  transition:all .2s ease}
+.link:hover{transform:translateY(-4px);background:rgba(255,255,255,.15)}
+.foot{color:var(--muted);margin-top:12px;font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- background video -->
+<div class="bg">
+  <video id="bgvid" autoplay muted loop playsinline>
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Capcut/main/SNUFF%206.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- background audio -->
+<audio id="bgAudio" loop preload="auto">
+  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- popup -->
+<div class="overlay" id="overlay">
+  <h2>Do you want to play background music?</h2>
+  <div class="btns">
+    <button class="btn allow" id="allowBtn">Allow</button>
+    <button class="btn skip" id="skipBtn">Skip</button>
+  </div>
+</div>
+
+<!-- main content -->
+<main class="center">
+  <section class="card">
+    <img class="pfp" src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/IMG_20250903_192843.jpg" alt="Profile">
+    <div class="title">SakshamX</div>
+    <div class="tag">Find me on</div>
+
+    <nav class="links">
+      <a class="link" href="https://t.me/Sakshamguptax" target="_blank">Telegram</a>
+      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank">Instagram</a>
+      <a class="link" href="https://www.snapchat.com/add/sakshamguptax" target="_blank">Snapchat</a>
+    </nav>
+
+    <div class="foot">© 2025 • Built by Ayu 💜</div>
+  </section>
+</main>
+
+<script>
+const overlay = document.getElementById("overlay");
+const audio = document.getElementById("bgAudio");
+
+document.getElementById("allowBtn").addEventListener("click", async ()=>{
+  try {
+    await audio.play();
+    console.log("Audio started");
+  } catch(err){
+    console.log("Play blocked:", err);
+  }
+  overlay.style.display="none";
+});
+
+document.getElementById("skipBtn").addEventListener("click", ()=>{
+  overlay.style.display="none";
+});
+</script>
+
+</body>
+</html>
