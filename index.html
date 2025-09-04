@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>SakshamX — Links</title>
 <meta name="theme-color" content="#0b0f1a" />
-<!-- confetti lib (you used this) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
@@ -22,7 +21,7 @@
     background:var(--bg); color:var(--text); overflow:hidden;
   }
 
-  /* BG video (same approach as your working code) */
+  /* BG video */
   .bg{position:fixed; inset:0; z-index:-2; overflow:hidden}
   .bg video{
     position:absolute; top:50%; left:50%;
@@ -37,7 +36,7 @@
       linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6));
   }
 
-  /* subtle animated colorful blobs (nice ambient) */
+  /* subtle animated colorful blobs */
   .blob{position:absolute; width:46vmax; height:46vmax; border-radius:50%;
     filter:blur(60px); opacity:.20; pointer-events:none; z-index:-1;
     background:conic-gradient(from 0deg, #8b5cf6 0%, #06b6d4 40%, #22d3ee 70%, #8b5cf6 100%);
@@ -78,7 +77,7 @@
   .link:hover{ transform:translateY(-4px); background:rgba(255,255,255,.12); box-shadow:0 10px 30px rgba(0,0,0,.32) }
   .ico{width:22px;height:22px; display:inline-grid; place-items:center}
 
-  /* floating sound control (copied your pattern) */
+  /* floating sound control */
   .muteBtn{
     position:fixed; right:14px; top:14px; z-index:10; display:flex; align-items:center; gap:10px;
     padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.55); color:#fff;
@@ -106,7 +105,6 @@
 <!-- Background + blobs -->
 <div class="bg" aria-hidden="true">
   <video id="bgvid" playsinline autoplay muted loop preload="auto" poster="">
-    <!-- background video you used in working code -->
     <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Capcut/main/SNUFF%206.mp4" type="video/mp4">
   </video>
   <div class="blob"></div>
@@ -114,13 +112,12 @@
   <div class="bg-fade" style="position:absolute;inset:0;z-index:0"></div>
 </div>
 
-<!-- Optionally separate audio track (if you have a dedicated song file).
-     If not available, the code will try to unmute the video audio (if it has audio). -->
+<!-- Optionally separate audio track -->
 <audio id="bgAudio" preload="auto" loop>
   <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- floating sound control (same UI pattern you used) -->
+<!-- floating sound control -->
 <button id="soundControl" class="muteBtn" aria-pressed="false" title="Toggle sound">
   <span id="soundIcon">
     <!-- speaker-off icon by default -->
@@ -171,10 +168,10 @@
 </main>
 
 <script>
-/* --- audio/video handling (based on your working code approach) --- */
+/* --- audio/video handling --- */
 (function(){
   const video = document.getElementById('bgvid');
-  const audio = document.getElementById('bgAudio'); // optional music file
+  const audio = document.getElementById('bgAudio');
   const soundControl = document.getElementById('soundControl');
   const soundLabel = document.getElementById('soundLabel');
   const soundIcon = document.getElementById('soundIcon');
@@ -182,110 +179,118 @@
   const tapRoot = document.getElementById('tapRoot');
 
   const STORAGE_KEY = 'saksham_sound_pref';
-  let pref = localStorage.getItem(STORAGE_KEY) || 'off';
-  let started = false;
+  let isSoundEnabled = localStorage.getItem(STORAGE_KEY) === 'on';
 
-  function setUIOn(){
-    soundControl.setAttribute('aria-pressed','true');
-    soundLabel.textContent = 'Sound On';
-    soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
-      <path d="M15 9a5 5 0 0 1 0 6"></path>
-      <path d="M17.7 6.3a9 9 0 0 1 0 11.4"></path>
-    </svg>`;
-    hint.textContent = 'Sound is ON';
+  // Function to update UI based on sound state
+  function updateUI(state) {
+    if (state) {
+      soundControl.setAttribute('aria-pressed', 'true');
+      soundLabel.textContent = 'Sound On';
+      soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+        <path d="M15 9a5 5 0 0 1 0 6"></path>
+        <path d="M17.7 6.3a9 9 0 0 1 0 11.4"></path>
+      </svg>`;
+      hint.textContent = 'Sound is ON';
+    } else {
+      soundControl.setAttribute('aria-pressed', 'false');
+      soundLabel.textContent = 'Play Sound';
+      soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+        <path d="M19 9l-4 4M15 9l4 4"></path>
+      </svg>`;
+      hint.textContent = 'Tap anywhere to enable audio 🎵';
+    }
   }
-  function setUIOff(){
-    soundControl.setAttribute('aria-pressed','false');
-    soundLabel.textContent = 'Play Sound';
-    soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
-      <path d="M19 9l-4 4M15 9l4 4"></path>
-    </svg>`;
-    hint.textContent = 'Tap anywhere to enable audio 🎵';
-  }
 
-  async function tryStartAudio(){
-    // Try the separate audio element if it exists and has source
-    try{
-      if (audio && audio.querySelector('source') && audio.querySelector('source').src){
-        audio.muted = false;
-        await audio.play();
-        started = true;
-        return true;
-      }
-    }catch(e){ /* continue to video fallback */ }
-
-    // Fallback: unmute video (works only if video has audio track)
-    try{
+  // Play both video and audio
+  async function playMedia() {
+    try {
       video.muted = false;
       await video.play();
-      started = true;
-      return true;
-    }catch(e){
-      // still blocked by browser policies
+      if (audio) {
+        audio.muted = false;
+        await audio.play();
+      }
+      isSoundEnabled = true;
+      localStorage.setItem(STORAGE_KEY, 'on');
+      updateUI(true);
+    } catch (e) {
+      console.error("Autoplay was prevented:", e);
+      isSoundEnabled = false;
+      localStorage.setItem(STORAGE_KEY, 'off');
+      updateUI(false);
     }
-    return false;
   }
 
-  async function stopAudio(){
-    try{ if (audio && !audio.paused) audio.pause(); }catch(e){}
-    try{ video.muted = true; }catch(e){}
-    started = false;
+  // Stop both video and audio
+  function stopMedia() {
+    try {
+      video.muted = true;
+      video.pause();
+    } catch (e) {
+      console.error("Could not pause video:", e);
+    }
+    try {
+      if (audio) {
+        audio.muted = true;
+        audio.pause();
+      }
+    } catch (e) {
+      console.error("Could not pause audio:", e);
+    }
+    isSoundEnabled = false;
+    localStorage.setItem(STORAGE_KEY, 'off');
+    updateUI(false);
   }
 
-  // first user gesture anywhere -> try enable audio
-  async function firstGesture(e){
+  // Handle first user gesture to enable media
+  async function handleFirstGesture(e) {
     createRipple(e);
-    document.removeEventListener('pointerdown', firstGesture);
-    document.removeEventListener('keydown', firstGesture);
-    const ok = await tryStartAudio();
-    if (ok){
-      pref = 'on'; localStorage.setItem(STORAGE_KEY, 'on'); setUIOn();
-    } else {
-      setUIOff();
-    }
+    // Remove listeners to prevent multiple calls
+    document.removeEventListener('pointerdown', handleFirstGesture);
+    document.removeEventListener('keydown', handleFirstGesture);
+    playMedia();
   }
-  document.addEventListener('pointerdown', firstGesture, { once:true, passive:true });
-  document.addEventListener('keydown', firstGesture, { once:true });
+  
+  // Set up listeners for the first interaction
+  document.addEventListener('pointerdown', handleFirstGesture, { once: true, passive: true });
+  document.addEventListener('keydown', handleFirstGesture, { once: true });
 
-  // sound control toggles
-  soundControl.addEventListener('click', async (ev) => {
+  // Sound control button toggles media state
+  soundControl.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    const pressed = soundControl.getAttribute('aria-pressed') === 'true';
-    if (pressed){
-      await stopAudio();
-      pref = 'off'; localStorage.setItem(STORAGE_KEY, 'off'); setUIOff();
+    if (isSoundEnabled) {
+      stopMedia();
     } else {
-      const ok = await tryStartAudio();
-      if (ok){ pref = 'on'; localStorage.setItem(STORAGE_KEY,'on'); setUIOn(); }
-      else setUIOff();
+      playMedia();
     }
   });
 
-  // try auto-resume if user previously allowed
-  if (pref === 'on'){
-    tryStartAudio().then(ok => ok? setUIOn() : setUIOff());
-  } else {
-    setUIOff();
-  }
-
-  // small ripple effect for taps
-  function createRipple(e){
+  // Small ripple effect for taps
+  function createRipple(e) {
     const r = document.createElement('div');
     r.className = 'ripple';
-    const x = (e.clientX || (window.innerWidth/2));
-    const y = (e.clientY || (window.innerHeight/2));
+    const x = e.clientX || (window.innerWidth / 2);
+    const y = e.clientY || (window.innerHeight / 2);
     r.style.left = x + 'px';
     r.style.top = y + 'px';
     document.body.appendChild(r);
-    setTimeout(()=> r.remove(), 800);
+    setTimeout(() => r.remove(), 800);
   }
-  tapRoot.addEventListener('pointerdown', (e)=> createRipple(e));
+  tapRoot.addEventListener('pointerdown', (e) => createRipple(e));
 
-  // optional: gentle celebration after enabling sound (not automatic)
-  // you can call confetti() from here when you want to celebrate
+  // Initial state setup on page load
+  window.onload = function() {
+    // If sound was enabled in a previous session, try to play it
+    if (isSoundEnabled) {
+      playMedia();
+    } else {
+      updateUI(false);
+    }
+  }
 })();
 </script>
 </body>
 </html>
+
