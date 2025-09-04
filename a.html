@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SakshamX — Links</title>
+<meta name="theme-color" content="#0b0f1a" />
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+:root{
+  --bg:#0b0f1a; --text:#f5f7fb; --muted:#a9b2c7;
+  --cardA:rgba(255,255,255,.10); --cardB:rgba(255,255,255,.06);
+  --stroke:rgba(255,255,255,.16); --radius:22px; --blur:18px;
+  --accent:#8b5cf6; --accent2:#06b6d4; --shadow:0 28px 90px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
+body,html{margin:0;height:100%;font-family:system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);overflow:hidden}
+
+/* background video */
+.bg{position:fixed;inset:0;z-index:-2;overflow:hidden}
+.bg video{position:absolute;top:50%;left:50%;min-width:100%;min-height:100%;transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.85) contrast(1.1)}
+.bg::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(0,0,0,.3),rgba(0,0,0,.65))}
+
+/* animated blobs */
+.blob{position:absolute;width:50vmax;height:50vmax;border-radius:50%;filter:blur(60px);opacity:.25;pointer-events:none;z-index:-1;background:conic-gradient(from 0deg,#8b5cf6,#06b6d4,#22d3ee,#8b5cf6);animation:blobMove 28s ease-in-out infinite alternate;mix-blend-mode:screen}
+@keyframes blobMove{
+  0%{transform:translate(-20vw,-10vh) scale(.9) rotate(0deg)}
+  50%{transform:translate(15vw,10vh) scale(1.1) rotate(120deg)}
+  100%{transform:translate(-5vw,25vh) scale(.95) rotate(260deg)}
+}
+
+/* card */
+.center{position:fixed;inset:0;display:grid;place-items:center;padding:20px}
+.card{width:min(92vw,540px);padding:26px 22px;background:linear-gradient(180deg,var(--cardA),var(--cardB));border:1px solid var(--stroke);border-radius:var(--radius);backdrop-filter:blur(var(--blur));box-shadow:var(--shadow);text-align:center;animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.pfp{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.5);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.title{font-weight:900;font-size:clamp(20px,3.6vw,30px);margin-top:10px}
+.tag{color:var(--muted);margin-top:6px}
+
+.links{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.link{display:flex;align-items:center;gap:12px;justify-content:center;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid var(--stroke);color:var(--text);text-decoration:none;font-weight:700;transition:all .2s ease}
+.link:hover{transform:translateY(-4px) scale(1.02);background:rgba(255,255,255,.15);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.ico{width:22px;height:22px;display:inline-grid;place-items:center}
+
+.hint{color:var(--muted);margin-top:12px;font-size:13px}
+.foot{color:var(--muted);margin-top:12px;font-size:13px}
+
+/* floating sound button */
+.muteBtn{position:fixed;top:15px;right:15px;z-index:20;padding:10px 14px;border-radius:12px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#fff;font-weight:700;cursor:pointer;backdrop-filter:blur(6px);display:flex;align-items:center;gap:8px;transition:background .2s}
+.muteBtn:hover{background:rgba(0,0,0,.75)}
+.muteBtn svg{width:20px;height:20px;transition:transform .3s}
+.muteBtn.active svg{transform:scale(1.2);fill:var(--accent)}
+
+</style>
+</head>
+<body>
+
+<!-- bg video -->
+<div class="bg">
+  <video id="bgvid" autoplay muted loop playsinline>
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/videoone.mp4" type="video/mp4">
+  </video>
+  <div class="blob"></div>
+</div>
+
+<!-- bg audio -->
+<audio id="bgAudio" loop preload="auto">
+  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- sound toggle -->
+<button id="soundControl" class="muteBtn" aria-pressed="false">
+  <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+    <path d="M19 9l-4 4M15 9l4 4"></path>
+  </svg>
+  <span id="soundLabel">Play Sound</span>
+</button>
+
+<!-- card -->
+<main class="center">
+  <section class="card">
+    <img class="pfp" src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/IMG_20250903_192843.jpg" alt="SakshamX">
+    <div class="title">SakshamX</div>
+    <div class="tag">Find me on</div>
+
+    <nav class="links">
+      <a class="link" href="https://t.me/Sakshamguptax" target="_blank"><span class="ico">📨</span> Telegram</a>
+      <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank"><span class="ico">📸</span> Instagram</a>
+      <a class="link" href="https://www.snapchat.com/add/sakshamguptax" target="_blank"><span class="ico">👻</span> Snapchat</a>
+    </nav>
+
+    <div class="hint" id="hint">Tap anywhere or use button to enable audio 🎵</div>
+    <div class="foot">© 2025 • Built with 💜 by Ayu</div>
+  </section>
+</main>
+
+<script>
+const audio = document.getElementById('bgAudio');
+const soundBtn = document.getElementById('soundControl');
+const soundLabel = document.getElementById('soundLabel');
+const soundIcon = document.getElementById('soundIcon');
+let isPlaying = false;
+
+// toggle sound
+async function toggleSound() {
+  if (!isPlaying) {
+    try {
+      await audio.play();
+      isPlaying = true;
+      soundBtn.classList.add("active");
+      soundLabel.textContent = "Sound On";
+      soundIcon.innerHTML = `<path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+        <path d="M15 9a5 5 0 0 1 0 6"></path>
+        <path d="M17.7 6.3a9 9 0 0 1 0 11.4"></path>`;
+      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+    } catch(err) {
+      console.log("Play blocked:", err);
+    }
+  } else {
+    audio.pause();
+    isPlaying = false;
+    soundBtn.classList.remove("active");
+    soundLabel.textContent = "Play Sound";
+    soundIcon.innerHTML = `<path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+      <path d="M19 9l-4 4M15 9l4 4"></path>`;
+  }
+}
+
+soundBtn.addEventListener("click", toggleSound);
+
+// allow tap anywhere
+document.body.addEventListener("click", (e)=>{
+  if (!isPlaying && e.target !== soundBtn && !soundBtn.contains(e.target)) {
+    toggleSound();
+  }
+}, { once: true });
+</script>
+
+</body>
+</html>
