@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>SakshamX — Links</title>
 <meta name="theme-color" content="#0b0f1a" />
+<!-- confetti lib (you used this) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
   :root{
@@ -14,173 +16,149 @@
     --accent:#8b5cf6; --accent2:#06b6d4; --shadow:0 28px 90px rgba(0,0,0,.55);
   }
   *{box-sizing:border-box}
-  html,body{height:100%}
+  html,body{height:100%; margin:0}
   body{
-    margin:0; color:var(--text); background:var(--bg);
     font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-    overflow:hidden;
+    background:var(--bg); color:var(--text); overflow:hidden;
   }
 
-  /* ---------- Background video + effects ---------- */
+  /* BG video (same approach as your working code) */
   .bg{position:fixed; inset:0; z-index:-2; overflow:hidden}
   .bg video{
     position:absolute; top:50%; left:50%;
     min-width:100%; min-height:100%;
     transform:translate(-50%,-50%); object-fit:cover;
-    filter:brightness(.85) contrast(1.08) saturate(1.05);
+    filter:saturate(1.05) brightness(.90) contrast(1.05);
   }
-  .shade{position:absolute; inset:0; z-index:-1;
+  .bg::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
     background:
-      radial-gradient(80% 60% at 50% 35%, rgba(0,0,0,0), rgba(0,0,0,.45)),
-      linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.65));
+      radial-gradient(80% 60% at 50% 40%, rgba(0,0,0,0), rgba(0,0,0,.45)),
+      linear-gradient(to bottom, rgba(0,0,0,.2), rgba(0,0,0,.6));
   }
 
-  /* animated soft blobs */
-  .blob{
-    position:absolute; width:46vmax; height:46vmax; border-radius:50%;
-    filter:blur(60px); opacity:.22; pointer-events:none; z-index:-1;
-    background:conic-gradient(from 0deg, #8b5cf6 0%, #06b6d4 35%, #22d3ee 60%, #8b5cf6 100%);
-    animation: blobMove 24s ease-in-out infinite alternate;
-    mix-blend-mode: screen;
-  }
-  .blob.b2{animation-duration:28s; animation-delay:-6s; transform:translateX(40vw) translateY(10vh) scale(.8)}
+  /* subtle animated colorful blobs (nice ambient) */
+  .blob{position:absolute; width:46vmax; height:46vmax; border-radius:50%;
+    filter:blur(60px); opacity:.20; pointer-events:none; z-index:-1;
+    background:conic-gradient(from 0deg, #8b5cf6 0%, #06b6d4 40%, #22d3ee 70%, #8b5cf6 100%);
+    animation: blobMove 26s ease-in-out infinite alternate; mix-blend-mode:screen;}
+  .blob.b2{animation-duration:30s; transform:translateX(40vw) translateY(10vh) scale(.8)}
   @keyframes blobMove{
-    0%{transform:translate(-20vw,-10vh) scale(0.9) rotate(0deg)}
+    0%{transform:translate(-20vw,-10vh) scale(.9) rotate(0deg)}
     50%{transform:translate(10vw,10vh) scale(1.05) rotate(120deg)}
-    100%{transform:translate(-5vw,25vh) scale(0.95) rotate(260deg)}
+    100%{transform:translate(-5vw,25vh) scale(.95) rotate(260deg)}
   }
 
-  /* ---------- Center card ---------- */
+  /* Center card (glass) */
   .center{position:fixed; inset:0; display:grid; place-items:center; padding:22px}
   .card{
-    width:min(92vw,560px);
-    border-radius:var(--radius);
+    width:min(92vw,560px); border-radius:var(--radius);
     background:linear-gradient(180deg,var(--cardA),var(--cardB));
-    border:1px solid var(--stroke);
-    backdrop-filter:blur(var(--blur));
-    -webkit-backdrop-filter:blur(var(--blur));
-    box-shadow:var(--shadow);
-    padding:26px 24px 24px;
-    position:relative;
-    overflow:hidden;
-    animation: fadeUp .55s ease-out both;
+    border:1px solid var(--stroke); backdrop-filter:blur(var(--blur));
+    -webkit-backdrop-filter:blur(var(--blur)); box-shadow:var(--shadow);
+    padding:26px 22px; position:relative; text-align:center;
+    animation: fadeUp .5s ease both;
   }
   @keyframes fadeUp{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:translateY(0)}}
 
-  .title{font-weight:900; font-size:clamp(22px,3.8vw,34px); text-align:center}
-  .tag{color:var(--muted); text-align:center; margin:6px 0 18px}
+  .pfp{
+    width:96px;height:96px;border-radius:50%; object-fit:cover; display:inline-block;
+    border:3px solid rgba(255,255,255,.6); box-shadow:0 10px 32px rgba(0,0,0,.45);
+  }
+  .title{font-weight:900; font-size:clamp(20px,3.6vw,30px); margin-top:8px}
+  .tag{color:var(--muted); margin-top:6px}
 
-  /* ---------- Links ---------- */
-  .links{display:flex; flex-direction:column; gap:12px}
+  .links{display:flex; flex-direction:column; gap:12px; margin-top:18px}
   .link{
-    display:flex; align-items:center; gap:12px; justify-content:flex-start;
-    padding:14px 16px; border-radius:14px;
-    background:rgba(255,255,255,.08); border:1px solid var(--stroke);
-    color:var(--text); text-decoration:none; font-weight:800; letter-spacing:.2px;
-    transition:transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
-    box-shadow: 0 6px 24px rgba(0,0,0,.15) inset;
+    display:flex; align-items:center; gap:12px; justify-content:center;
+    padding:14px 16px; border-radius:14px; background:rgba(255,255,255,.06);
+    border:1px solid var(--stroke); color:var(--text); text-decoration:none; font-weight:800;
+    transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
   }
-  .link:hover{ transform:translateY(-2px); background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.25) }
-  .ico{ width:22px; height:22px; display:grid; place-items:center }
+  .link:hover{ transform:translateY(-4px); background:rgba(255,255,255,.12); box-shadow:0 10px 30px rgba(0,0,0,.32) }
+  .ico{width:22px;height:22px; display:inline-grid; place-items:center}
 
-  /* ---------- Floating Sound button ---------- */
-  .sound{
-    position:fixed; right:14px; top:14px; z-index:10;
-    display:flex; align-items:center; gap:8px; cursor:pointer;
-    padding:9px 12px; border-radius:14px;
-    background:rgba(0,0,0,.55); color:#fff;
-    border:1px solid rgba(255,255,255,.18);
-    backdrop-filter:blur(10px);
-    font-weight:800;
-    box-shadow: 0 10px 28px rgba(0,0,0,.4);
-    animation: popIn .35s ease-out both;
+  /* floating sound control (copied your pattern) */
+  .muteBtn{
+    position:fixed; right:14px; top:14px; z-index:10; display:flex; align-items:center; gap:10px;
+    padding:10px 12px; border-radius:12px; background:rgba(0,0,0,.55); color:#fff;
+    border:1px solid rgba(255,255,255,.18); font-weight:800; cursor:pointer;
+    backdrop-filter: blur(8px);
   }
-  @keyframes popIn{from{opacity:0; transform:translateY(-6px) scale(.96)} to{opacity:1; transform:none}}
-  .pulse{position:absolute; inset:-6px; border-radius:18px; pointer-events:none; }
-  .pulse::after{
-    content:""; position:absolute; inset:0; border-radius:inherit;
-    border:2px solid rgba(255,255,255,.22);
-    animation: pulse 1.8s ease-out infinite;
-  }
-  @keyframes pulse{
-    0%{transform:scale(.96); opacity:.8}
-    70%{transform:scale(1.08); opacity:.15}
-    100%{transform:scale(1.1); opacity:0}
-  }
-  .sound .sico{width:18px; height:18px}
+  .muteBtn svg{width:18px;height:18px}
 
-  .hint{margin-top:14px; text-align:center; color:var(--muted); font-size:13px}
-  .foot{margin-top:16px; text-align:center; color:var(--muted); font-size:13px}
+  .hint{color:var(--muted); margin-top:14px; font-size:13px}
+  .foot{color:var(--muted); margin-top:14px; font-size:13px}
 
-  /* ripple on click anywhere */
-  .ripple{
-    position:fixed; border-radius:50%; pointer-events:none;
-    transform:translate(-50%,-50%); width:0; height:0; opacity:.35;
-    background:radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 70%);
-    animation: ripple .7s ease-out forwards;
+  /* ripple used when user taps */
+  .ripple{position:fixed;border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); width:0;height:0; opacity:.28;
+    background:radial-gradient(circle, rgba(255,255,255,.8) 0%, rgba(255,255,255,0) 60%); animation:rip .7s ease-out forwards;}
+  @keyframes rip{to{width:220px;height:220px; opacity:0}}
+
+  @media (max-width:420px){
+    .pfp{width:84px;height:84px}
+    .card{padding:18px}
   }
-  @keyframes ripple{to{width:220px; height:220px; opacity:0}}
 </style>
 </head>
 <body>
 
-<!-- Background -->
+<!-- Background + blobs -->
 <div class="bg" aria-hidden="true">
-  <video id="bgvid" playsinline autoplay muted loop preload="auto"
-         poster="" >
-    <!-- Replace this later if you want -->
-    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/videoone.mp4" type="video/mp4" />
+  <video id="bgvid" playsinline autoplay muted loop preload="auto" poster="">
+    <!-- background video you used in working code -->
+    <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Capcut/main/SNUFF%206.mp4" type="video/mp4">
   </video>
-  <div class="shade"></div>
   <div class="blob"></div>
   <div class="blob b2"></div>
+  <div class="bg-fade" style="position:absolute;inset:0;z-index:0"></div>
 </div>
 
-<!-- Optional separate music track; remove if you only want video audio -->
-<audio id="music" preload="auto" loop>
-  <!-- Replace with your own track or leave as-is (silent if 404) -->
-  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg" />
+<!-- Optionally separate audio track (if you have a dedicated song file).
+     If not available, the code will try to unmute the video audio (if it has audio). -->
+<audio id="bgAudio" preload="auto" loop>
+  <source src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Floating sound button -->
-<button id="soundBtn" class="sound" aria-pressed="false">
-  <span class="pulse" aria-hidden="true"></span>
-  <span id="soundIcon" class="sico">
-    <!-- speaker-off -->
+<!-- floating sound control (same UI pattern you used) -->
+<button id="soundControl" class="muteBtn" aria-pressed="false" title="Toggle sound">
+  <span id="soundIcon">
+    <!-- speaker-off icon by default -->
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
       <path d="M19 9l-4 4M15 9l4 4"></path>
     </svg>
   </span>
-  <span id="soundText">Play Sound</span>
+  <span id="soundLabel">Play Sound</span>
 </button>
 
 <!-- Center card -->
 <main class="center" id="tapRoot">
   <section class="card" role="region" aria-label="links">
+    <img class="pfp" alt="SakshamX" src="https://raw.githubusercontent.com/RARExSIGMA2025/Saksham-/main/IMG_20250903_192843.jpg">
     <div class="title">SakshamX</div>
     <div class="tag">Find me on</div>
 
-    <nav class="links">
-      <!-- Telegram -->
+    <nav class="links" aria-label="Social links">
       <a class="link" href="https://t.me/Sakshamguptax" target="_blank" rel="noopener">
         <span class="ico" aria-hidden="true">
+          <!-- telegram svg -->
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24Zm5.3 7.7-1.9 9c-.2.9-.7 1.1-1.4.7l-3.1-2.2-1.4 1.4c-.2.2-.5.3-.8.2l.3-3.2 6.1-5.6c.3-.3-.1-.4-.5-.2l-7.4 4.8-3.2-.9c-.7-.2-.7-.7.1-1l12.4-4.8c.7-.3 1.2.1 1 .8Z"/></svg>
         </span>
         Telegram
       </a>
 
-      <!-- Instagram -->
       <a class="link" href="https://instagram.com/Sakshamguptax" target="_blank" rel="noopener">
         <span class="ico" aria-hidden="true">
+          <!-- instagram svg -->
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5Zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5Zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25Z"/></svg>
         </span>
         Instagram
       </a>
 
-      <!-- Snapchat (updated link) -->
       <a class="link" href="https://www.snapchat.com/add/sakshamguptax" target="_blank" rel="noopener">
         <span class="ico" aria-hidden="true">
+          <!-- snapchat svg -->
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c3.2 0 5.6 2.4 5.6 5.4 0 1.7-.7 3-1.3 4 .6.6 1.4 1 2.5 1.2.4.1.5.5.3.8-.6.7-1.7.9-2.5 1 .2.5.3 1 .4 1.4.1.3-.1.6-.4.7-1.1.3-1.9.1-2.7.6-.7.4-1.3 1.3-1.9 1.7-.5.2-1.1.2-1.6 0-.6-.4-1.2-1.3-1.9-1.7-.8-.5-1.6-.3-2.7-.6-.3-.1-.5-.4-.4-.7.1-.4.3-.9.4-1.4-.8-.1-1.9-.3-2.5-1-.2-.3-.1-.7.3-.8 1.1-.2 1.9-.6 2.5-1.2-.6-1-1.3-2.3-1.3-4C6.4 4.4 8.8 2 12 2Z"/></svg>
         </span>
         Snapchat
@@ -193,110 +171,120 @@
 </main>
 
 <script>
-(() => {
+/* --- audio/video handling (based on your working code approach) --- */
+(function(){
   const video = document.getElementById('bgvid');
-  const music = document.getElementById('music');   // optional
-  const soundBtn = document.getElementById('soundBtn');
-  const soundText = document.getElementById('soundText');
+  const audio = document.getElementById('bgAudio'); // optional music file
+  const soundControl = document.getElementById('soundControl');
+  const soundLabel = document.getElementById('soundLabel');
   const soundIcon = document.getElementById('soundIcon');
   const hint = document.getElementById('hint');
   const tapRoot = document.getElementById('tapRoot');
 
-  const KEY = 'sx_sound_pref_v1';
-  let pref = localStorage.getItem(KEY) || 'off';
+  const STORAGE_KEY = 'saksham_sound_pref';
+  let pref = localStorage.getItem(STORAGE_KEY) || 'off';
   let started = false;
 
-  // helpers
-  const setOnUI = () => {
-    soundBtn.setAttribute('aria-pressed','true');
-    soundText.textContent = 'Sound On';
+  function setUIOn(){
+    soundControl.setAttribute('aria-pressed','true');
+    soundLabel.textContent = 'Sound On';
     soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
       <path d="M15 9a5 5 0 0 1 0 6"></path>
       <path d="M17.7 6.3a9 9 0 0 1 0 11.4"></path>
     </svg>`;
     hint.textContent = 'Sound is ON';
-  };
-  const setOffUI = () => {
-    soundBtn.setAttribute('aria-pressed','false');
-    soundText.textContent = 'Play Sound';
+  }
+  function setUIOff(){
+    soundControl.setAttribute('aria-pressed','false');
+    soundLabel.textContent = 'Play Sound';
     soundIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
       <path d="M19 9l-4 4M15 9l4 4"></path>
     </svg>`;
     hint.textContent = 'Tap anywhere to enable audio 🎵';
-  };
+  }
 
-  // attempt to start sound (music preferred, else unmute video)
-  async function startSound(){
-    // Try music element if it has a source (won't play if file missing)
+  async function tryStartAudio(){
+    // Try the separate audio element if it exists and has source
     try{
-      if (music && music.querySelector('source') && music.querySelector('source').src){
-        music.muted = false;
-        await music.play();
+      if (audio && audio.querySelector('source') && audio.querySelector('source').src){
+        audio.muted = false;
+        await audio.play();
         started = true;
         return true;
       }
-    }catch(e){ /* ignore and try video */ }
+    }catch(e){ /* continue to video fallback */ }
 
-    // Fallback: unmute video if it has audio track
+    // Fallback: unmute video (works only if video has audio track)
     try{
       video.muted = false;
       await video.play();
       started = true;
       return true;
-    }catch(e){ /* still blocked */ }
-
+    }catch(e){
+      // still blocked by browser policies
+    }
     return false;
   }
 
-  async function stopSound(){
-    try{ if (music && !music.paused) music.pause(); }catch(e){}
+  async function stopAudio(){
+    try{ if (audio && !audio.paused) audio.pause(); }catch(e){}
     try{ video.muted = true; }catch(e){}
     started = false;
   }
 
-  // first gesture anywhere -> start
-  const firstTap = async (e) => {
-    addRipple(e);
-    document.removeEventListener('pointerdown', firstTap);
-    document.removeEventListener('keydown', firstTap);
-    const ok = await startSound();
-    if (ok){ pref = 'on'; localStorage.setItem(KEY, 'on'); setOnUI(); }
-  };
-  document.addEventListener('pointerdown', firstTap, { once:true, passive:true });
-  document.addEventListener('keydown', firstTap, { once:true });
-
-  // sound button toggles
-  soundBtn.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    if (soundBtn.getAttribute('aria-pressed') === 'true'){
-      await stopSound();
-      pref = 'off'; localStorage.setItem(KEY,'off'); setOffUI();
+  // first user gesture anywhere -> try enable audio
+  async function firstGesture(e){
+    createRipple(e);
+    document.removeEventListener('pointerdown', firstGesture);
+    document.removeEventListener('keydown', firstGesture);
+    const ok = await tryStartAudio();
+    if (ok){
+      pref = 'on'; localStorage.setItem(STORAGE_KEY, 'on'); setUIOn();
     } else {
-      const ok = await startSound();
-      if (ok){ pref = 'on'; localStorage.setItem(KEY,'on'); setOnUI(); }
+      setUIOff();
+    }
+  }
+  document.addEventListener('pointerdown', firstGesture, { once:true, passive:true });
+  document.addEventListener('keydown', firstGesture, { once:true });
+
+  // sound control toggles
+  soundControl.addEventListener('click', async (ev) => {
+    ev.stopPropagation();
+    const pressed = soundControl.getAttribute('aria-pressed') === 'true';
+    if (pressed){
+      await stopAudio();
+      pref = 'off'; localStorage.setItem(STORAGE_KEY, 'off'); setUIOff();
+    } else {
+      const ok = await tryStartAudio();
+      if (ok){ pref = 'on'; localStorage.setItem(STORAGE_KEY,'on'); setUIOn(); }
+      else setUIOff();
     }
   });
 
-  // resume automatically if user previously allowed (still requires play(), may work on some browsers)
+  // try auto-resume if user previously allowed
   if (pref === 'on'){
-    startSound().then(ok => ok ? setOnUI() : setOffUI());
+    tryStartAudio().then(ok => ok? setUIOn() : setUIOff());
   } else {
-    setOffUI();
+    setUIOff();
   }
 
-  // small ripple effect on first taps
-  function addRipple(e){
-    const r = document.createElement('span');
+  // small ripple effect for taps
+  function createRipple(e){
+    const r = document.createElement('div');
     r.className = 'ripple';
     const x = (e.clientX || (window.innerWidth/2));
     const y = (e.clientY || (window.innerHeight/2));
-    r.style.left = x + 'px'; r.style.top = y + 'px';
+    r.style.left = x + 'px';
+    r.style.top = y + 'px';
     document.body.appendChild(r);
-    setTimeout(() => r.remove(), 800);
+    setTimeout(()=> r.remove(), 800);
   }
-  tapRoot.addEventListener('pointerdown', addRipple);
+  tapRoot.addEventListener('pointerdown', (e)=> createRipple(e));
+
+  // optional: gentle celebration after enabling sound (not automatic)
+  // you can call confetti() from here when you want to celebrate
 })();
 </script>
 </body>
