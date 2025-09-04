@@ -72,7 +72,7 @@
 </audio>
 
 <!-- toggle button -->
-<button id="muteBtn" class="mute">Sound: OFF (Tap anywhere)</button>
+<button id="muteBtn" class="mute">🔊 Play Sound</button>
 
 <!-- center card -->
 <main class="center">
@@ -92,48 +92,48 @@
       </a>
     </div>
 
-    <div class="status" id="statusText">Audio not enabled — tap anywhere.</div>
+    <div class="status" id="statusText">Tap anywhere to enable audio 🎵</div>
     <div class="footer">© 2025 • Built with 💜 by Ayu</div>
   </section>
 </main>
 
 <script>
-const video = document.getElementById('bgvid');
 const audio = document.getElementById('bgAudio');
 const muteBtn = document.getElementById('muteBtn');
 const statusText = document.getElementById('statusText');
 
-let soundEnabled = false;
+let playing = false;
 
-// try enabling sound
-async function enableSound() {
+async function playAudio() {
   try {
     await audio.play();
-    audio.muted = false;
-    video.muted = false;
-    soundEnabled = true;
-    muteBtn.textContent = 'Sound: ON (Click to MUTE)';
-    statusText.textContent = 'Sound is ON';
-  } catch {
-    statusText.textContent = 'Tap again to enable sound (browser blocked autoplay)';
+    playing = true;
+    muteBtn.textContent = "🔇 Pause Sound";
+    statusText.textContent = "Sound is ON 🎶";
+  } catch (err) {
+    statusText.textContent = "Tap again to enable audio (browser blocked)";
   }
 }
 
-// toggle mute/unmute
-muteBtn.addEventListener('click', () => {
-  if (soundEnabled) {
-    audio.pause();
-    video.muted = true;
-    soundEnabled = false;
-    muteBtn.textContent = 'Sound: OFF (Click to UNMUTE)';
-    statusText.textContent = 'Audio muted';
+function pauseAudio() {
+  audio.pause();
+  playing = false;
+  muteBtn.textContent = "🔊 Play Sound";
+  statusText.textContent = "Sound is OFF";
+}
+
+muteBtn.addEventListener("click", () => {
+  if (playing) {
+    pauseAudio();
   } else {
-    enableSound();
+    playAudio();
   }
 });
 
-// start sound on first click anywhere
-document.addEventListener('click', enableSound, { once: true });
+// Start audio on first user interaction anywhere
+document.addEventListener("click", () => {
+  if (!playing) playAudio();
+}, { once: true });
 </script>
 
 </body>
